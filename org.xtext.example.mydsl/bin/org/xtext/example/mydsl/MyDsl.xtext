@@ -1,0 +1,34 @@
+grammar org.xtext.example.mydsl.MyDsl with org.eclipse.xtext.common.Terminals
+
+generate myDsl "http://www.xtext.org/example/mydsl/MyDsl"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Model:
+	operation+=Expression*;
+
+Define:
+	'(' 'define' ID INT ')'
+;
+
+Lambda:
+	'(' 'lambda' '(' (ID | INT) ')'*
+;
+Operator: 
+	'+' | '-' | '*' | '/' 
+;
+Conditional:
+	'(' 'if' '(' '=' (INT|ID) INT ')' INT ')'?
+;
+Variable:
+	'(' Operator ID INT ')'
+;
+Factorial:
+	'(' ID | Variable ')'
+;
+Operation:
+	'(' Operator ID | Factorial ')'
+;
+
+Expression:
+	 Define | INT | Lambda | Conditional | Variable | Factorial | Operation 
+;
