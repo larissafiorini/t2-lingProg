@@ -1,9 +1,0 @@
-grammar org.xtext.example.mydsl.Scheme with org.eclipse.xtext.common.Terminals
-
-generate scheme "http://www.xtext.org/example/mydsl/Scheme"
-
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';
