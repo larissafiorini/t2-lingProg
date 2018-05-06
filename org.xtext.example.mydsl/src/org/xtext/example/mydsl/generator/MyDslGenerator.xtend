@@ -7,6 +7,12 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import org.xtext.example.mydsl.myDsl.Model
+import org.xtext.example.mydsl.myDsl.Expression
+import org.xtext.example.mydsl.myDsl.Define
+import org.xtext.example.mydsl.myDsl.Lambda
+import org.xtext.example.mydsl.myDsl.Conditional
+import org.xtext.example.mydsl.myDsl.Operation
 
 /**
  * Generates code from your model files on save.
@@ -16,10 +22,37 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class MyDslGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+		fsa.generateFile('MyDslRunApp.mydsl', resource.start);
 	}
+	
+	def start(Resource r) '''
+		//teste
+
+		
+		public class MyDslRunApp
+		{
+			public static void main(String[] args) throws Exception {
+				« FOR m : r.allContents.toIterable.filter(Model) »
+						« FOR c : m.expressions »
+							«c.compile»
+						«ENDFOR»		
+				«ENDFOR»	
+		    					
+			}
+		}
+	'''
+	
+	
+		def dispatch compile(Define c) '''
+		int «c.name» = «c.value»;
+	'''
+	
+		def dispatch compile(Operation c) '''
+		«c.value» «c.op» «c.value2»;
+	'''
+	
+		def dispatch compile(Conditional c) '''
+		if(«c.value» == «c.value2»){System.sout.println(«c.value3»);}
+	'''
+	
 }

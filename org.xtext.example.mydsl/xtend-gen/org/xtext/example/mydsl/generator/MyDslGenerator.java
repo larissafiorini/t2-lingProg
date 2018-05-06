@@ -3,6 +3,7 @@
  */
 package org.xtext.example.mydsl.generator;
 
+import java.util.Arrays;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
@@ -17,5 +18,41 @@ import org.eclipse.xtext.generator.IGeneratorContext;
 public class MyDslGenerator extends AbstractGenerator {
   @Override
   public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
+    fsa.generateFile("MyDslRunApp.mydsl", this.start(resource));
   }
-}
+  
+  public CharSequence start(final Resource r) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field expressions is undefined for the type Model"
+      + "\ncompile cannot be resolved");
+  }
+  
+  protected CharSequence _compile(final /* Define */Object c) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nname cannot be resolved"
+      + "\nvalue cannot be resolved");
+  }
+  
+  protected CharSequence _compile(final /* Operation */Object c) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nvalue cannot be resolved"
+      + "\nop cannot be resolved"
+      + "\nvalue2 cannot be resolved");
+  }
+  
+  protected CharSequence _compile(final /* Conditional */Object c) {
+    throw new Error("Unresolved compilation problems:"
+      + "\nvalue cannot be resolved"
+      + "\nvalue2 cannot be resolved"
+      + "\nvalue3 cannot be resolved");
+  }
+  
+  public CharSequence compile(final Define c) {
+    if (c != null) {
+      return _compile(c); else {
+        throw new IllegalArgumentException("Unhandled parameter types: " +
+          Arrays.<Object>asList(c).toString());
+      }
+    }
+  }
+  
