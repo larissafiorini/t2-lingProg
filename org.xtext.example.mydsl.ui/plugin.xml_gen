@@ -249,6 +249,15 @@
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="org.xtext.example.mydsl.MyDsl"
+			class="org.xtext.example.mydsl.ui.MyDslExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="org.xtext.example.mydsl.MyDsl.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="org.xtext.example.mydsl.ui.keyword_MyDsl"/>
+		</page>
+	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
 			class="org.xtext.example.mydsl.ui.MyDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
@@ -397,12 +406,18 @@
 			class="org.xtext.example.mydsl.ui.MyDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="mydsl">
 		</viewer>
+		<contentTypeBinding
+			contentTypeId="org.xtext.example.mydsl.MyDsl.contenttype"
+			contentViewerId="org.xtext.example.mydsl.MyDsl.compare.contentViewers" />
 	</extension>
 	<extension point="org.eclipse.compare.contentMergeViewers">
 		<viewer id="org.xtext.example.mydsl.MyDsl.compare.contentMergeViewers"
 			class="org.xtext.example.mydsl.ui.MyDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="mydsl" label="MyDsl Compare">
 		</viewer>
+		<contentTypeBinding
+			contentTypeId="org.xtext.example.mydsl.MyDsl.contenttype"
+			contentMergeViewerId="org.xtext.example.mydsl.MyDsl.compare.contentMergeViewers" />
 	</extension>
 	<extension point="org.eclipse.ui.editors.documentProviders">
 		<provider id="org.xtext.example.mydsl.MyDsl.editors.documentProviders"

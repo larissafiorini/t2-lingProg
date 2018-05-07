@@ -3,11 +3,21 @@
  */
 package org.xtext.example.mydsl.generator;
 
+import com.google.common.collect.Iterables;
 import java.util.Arrays;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
+import org.eclipse.xtext.xbase.lib.IteratorExtensions;
+import org.xtext.example.mydsl.myDsl.Conditional;
+import org.xtext.example.mydsl.myDsl.Define;
+import org.xtext.example.mydsl.myDsl.Expression;
+import org.xtext.example.mydsl.myDsl.Model;
+import org.xtext.example.mydsl.myDsl.Operation;
 
 /**
  * Generates code from your model files on save.
@@ -22,37 +32,96 @@ public class MyDslGenerator extends AbstractGenerator {
   }
   
   public CharSequence start(final Resource r) {
-    throw new Error("Unresolved compilation problems:"
-      + "\nThe method or field expressions is undefined for the type Model"
-      + "\ncompile cannot be resolved");
-  }
-  
-  protected CharSequence _compile(final /* Define */Object c) {
-    throw new Error("Unresolved compilation problems:"
-      + "\nname cannot be resolved"
-      + "\nvalue cannot be resolved");
-  }
-  
-  protected CharSequence _compile(final /* Operation */Object c) {
-    throw new Error("Unresolved compilation problems:"
-      + "\nvalue cannot be resolved"
-      + "\nop cannot be resolved"
-      + "\nvalue2 cannot be resolved");
-  }
-  
-  protected CharSequence _compile(final /* Conditional */Object c) {
-    throw new Error("Unresolved compilation problems:"
-      + "\nvalue cannot be resolved"
-      + "\nvalue2 cannot be resolved"
-      + "\nvalue3 cannot be resolved");
-  }
-  
-  public CharSequence compile(final Define c) {
-    if (c != null) {
-      return _compile(c); else {
-        throw new IllegalArgumentException("Unhandled parameter types: " +
-          Arrays.<Object>asList(c).toString());
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("//teste");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("public class MyDslRunApp");
+    _builder.newLine();
+    _builder.append("{");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("public static void main(String[] args) throws Exception {");
+    _builder.newLine();
+    {
+      Iterable<Model> _filter = Iterables.<Model>filter(IteratorExtensions.<EObject>toIterable(r.getAllContents()), Model.class);
+      for(final Model m : _filter) {
+        {
+          EList<Expression> _expressions = m.getExpressions();
+          for(final Expression c : _expressions) {
+            _builder.append("\t\t");
+            CharSequence _compile = this.compile(c);
+            _builder.append(_compile, "\t\t");
+            _builder.newLineIfNotEmpty();
+          }
+        }
       }
     }
+    _builder.append("    \t\t\t\t\t");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("}");
+    _builder.newLine();
+    _builder.append("}");
+    _builder.newLine();
+    return _builder;
   }
   
+  protected CharSequence _compile(final Define c) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("int ");
+    String _name = c.getName();
+    _builder.append(_name);
+    _builder.append(" = ");
+    int _value = c.getValue();
+    _builder.append(_value);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence _compile(final Operation c) {
+    StringConcatenation _builder = new StringConcatenation();
+    int _value = c.getValue();
+    _builder.append(_value);
+    _builder.append(" ");
+    String _op = c.getOp();
+    _builder.append(_op);
+    _builder.append(" ");
+    int _value2 = c.getValue2();
+    _builder.append(_value2);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence _compile(final Conditional c) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("if(");
+    int _value = c.getValue();
+    _builder.append(_value);
+    _builder.append(" == ");
+    int _value2 = c.getValue2();
+    _builder.append(_value2);
+    _builder.append("){System.sout.println(");
+    int _value3 = c.getValue3();
+    _builder.append(_value3);
+    _builder.append(");}");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  public CharSequence compile(final Expression c) {
+    if (c instanceof Conditional) {
+      return _compile((Conditional)c);
+    } else if (c instanceof Define) {
+      return _compile((Define)c);
+    } else if (c instanceof Operation) {
+      return _compile((Operation)c);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(c).toString());
+    }
+  }
+}
